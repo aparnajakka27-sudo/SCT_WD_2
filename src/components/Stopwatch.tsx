@@ -141,33 +141,33 @@ export const Stopwatch = () => {
         </div>
         
         {/* Huge Timer Display */}
-        <div className="flex justify-center items-start text-white font-mono font-medium tracking-tight select-none">
-          <div className="flex flex-col items-center w-20 sm:w-28">
-            <span className="text-6xl sm:text-[84px] leading-none tracking-tighter">{timeParts.hours}</span>
-            <span className="text-slate-500 text-[10px] sm:text-xs mt-3 font-sans font-semibold tracking-widest">HH</span>
+        <div className="flex justify-center items-start text-white font-mono font-medium tracking-tight select-none w-full max-w-full">
+          <div className="flex flex-col items-center w-[18%] sm:w-24 md:w-28">
+            <span className="text-4xl sm:text-6xl md:text-[84px] leading-none tracking-tighter">{timeParts.hours}</span>
+            <span className="text-slate-500 text-[9px] sm:text-[10px] md:text-xs mt-2 md:mt-3 font-sans font-semibold tracking-widest">HH</span>
           </div>
-          <span className="text-5xl sm:text-[72px] leading-none mx-0 sm:mx-2 text-slate-500 pt-1 sm:pt-2 font-light">:</span>
-          <div className="flex flex-col items-center w-20 sm:w-28">
-            <span className="text-6xl sm:text-[84px] leading-none tracking-tighter">{timeParts.minutes}</span>
-            <span className="text-slate-500 text-[10px] sm:text-xs mt-3 font-sans font-semibold tracking-widest">MM</span>
+          <span className="text-3xl sm:text-5xl md:text-[72px] leading-none mx-0.5 sm:mx-1 md:mx-2 text-slate-500 pt-1 sm:pt-1 md:pt-2 font-light">:</span>
+          <div className="flex flex-col items-center w-[18%] sm:w-24 md:w-28">
+            <span className="text-4xl sm:text-6xl md:text-[84px] leading-none tracking-tighter">{timeParts.minutes}</span>
+            <span className="text-slate-500 text-[9px] sm:text-[10px] md:text-xs mt-2 md:mt-3 font-sans font-semibold tracking-widest">MM</span>
           </div>
-          <span className="text-5xl sm:text-[72px] leading-none mx-0 sm:mx-2 text-slate-500 pt-1 sm:pt-2 font-light">:</span>
-          <div className="flex flex-col items-center w-20 sm:w-28">
-            <span className="text-6xl sm:text-[84px] leading-none tracking-tighter">{timeParts.seconds}</span>
-            <span className="text-slate-500 text-[10px] sm:text-xs mt-3 font-sans font-semibold tracking-widest">SS</span>
+          <span className="text-3xl sm:text-5xl md:text-[72px] leading-none mx-0.5 sm:mx-1 md:mx-2 text-slate-500 pt-1 sm:pt-1 md:pt-2 font-light">:</span>
+          <div className="flex flex-col items-center w-[18%] sm:w-24 md:w-28">
+            <span className="text-4xl sm:text-6xl md:text-[84px] leading-none tracking-tighter">{timeParts.seconds}</span>
+            <span className="text-slate-500 text-[9px] sm:text-[10px] md:text-xs mt-2 md:mt-3 font-sans font-semibold tracking-widest">SS</span>
           </div>
-          <div className="flex flex-col items-start w-24 sm:w-36 pl-1 sm:pl-2">
-            <span className="text-6xl sm:text-[84px] leading-none text-slate-500 tracking-tighter">.{timeParts.milliseconds}</span>
-            <span className="text-slate-500 text-[10px] sm:text-xs mt-3 font-sans font-semibold tracking-widest w-full text-center">MMM</span>
+          <div className="flex flex-col items-start w-[24%] sm:w-32 md:w-36 pl-0.5 sm:pl-1 md:pl-2">
+            <span className="text-4xl sm:text-6xl md:text-[84px] leading-none text-slate-500 tracking-tighter">.{timeParts.milliseconds}</span>
+            <span className="text-slate-500 text-[9px] sm:text-[10px] md:text-xs mt-2 md:mt-3 font-sans font-semibold tracking-widest w-full text-center">MMM</span>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-12 mb-12">
+        <div className="grid grid-cols-2 sm:flex sm:flex-row justify-center gap-3 sm:gap-6 mt-10 sm:mt-12 mb-10 sm:mb-12 w-full">
           {!isRunning ? (
             <button
               onClick={handleStart}
-              className="flex items-center justify-center min-w-[140px] gap-2.5 bg-indigo-500 hover:bg-indigo-400 text-white px-8 py-3.5 rounded-full font-medium shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all active:scale-95"
+              className="flex items-center justify-center gap-2.5 bg-indigo-500 hover:bg-indigo-400 text-white py-3.5 sm:py-4 rounded-2xl font-semibold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-lg shadow-indigo-900/20 w-full sm:min-w-[140px]"
             >
               <Play size={18} fill="currentColor" />
               {hasStarted ? "Resume" : "Start"}
@@ -175,7 +175,7 @@ export const Stopwatch = () => {
           ) : (
             <button
               onClick={handlePause}
-              className="flex items-center justify-center min-w-[140px] gap-2.5 bg-indigo-500 hover:bg-indigo-400 text-white px-8 py-3.5 rounded-full font-medium shadow-[0_0_20px_rgba(99,102,241,0.25)] transition-all active:scale-95"
+              className="flex items-center justify-center gap-2.5 bg-indigo-500 hover:bg-indigo-400 text-white py-3.5 sm:py-4 rounded-2xl font-semibold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-lg shadow-indigo-900/20 w-full sm:min-w-[140px]"
             >
               <Pause size={18} fill="currentColor" />
               Pause
@@ -185,7 +185,7 @@ export const Stopwatch = () => {
           <button
             onClick={handleLap}
             disabled={!isRunning}
-            className="flex items-center justify-center min-w-[140px] gap-2.5 bg-transparent border border-slate-700 hover:bg-slate-800 disabled:opacity-50 disabled:hover:bg-transparent text-slate-200 px-8 py-3.5 rounded-full font-medium transition-all active:scale-95"
+            className="flex items-center justify-center gap-2.5 bg-transparent border border-slate-700 hover:bg-slate-800 disabled:opacity-50 disabled:hover:bg-transparent text-slate-200 py-3.5 sm:py-4 rounded-2xl font-semibold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-500/50 w-full sm:min-w-[140px]"
           >
             <Flag size={18} className="text-slate-400" />
             Lap
@@ -194,7 +194,7 @@ export const Stopwatch = () => {
           <button
             onClick={handleReset}
             disabled={!hasStarted}
-            className="flex items-center justify-center min-w-[140px] gap-2.5 bg-transparent border border-rose-900/50 hover:bg-rose-950/30 disabled:opacity-50 disabled:hover:bg-transparent text-rose-500 px-8 py-3.5 rounded-full font-medium transition-all active:scale-95"
+            className="col-span-2 sm:col-span-1 flex items-center justify-center gap-2.5 bg-transparent border border-rose-900/50 hover:bg-rose-950/30 disabled:opacity-50 disabled:hover:bg-transparent text-rose-500 py-3.5 sm:py-4 rounded-2xl font-semibold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-500/50 w-full sm:min-w-[140px]"
           >
             <RotateCcw size={18} className="text-rose-500" />
             Reset
