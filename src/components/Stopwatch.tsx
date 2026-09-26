@@ -7,10 +7,19 @@ export const Stopwatch = () => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [laps, setLaps] = useState<Lap[]>([]);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   
   const startTimeRef = useRef<number | null>(null);
   const pausedTimeRef = useRef<number>(0);
   const animationFrameRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
 
   const updateTimer = () => {
     if (startTimeRef.current !== null) {
@@ -87,7 +96,6 @@ export const Stopwatch = () => {
       if (lap.lapTime > slow.lapTime) slow = lap;
     });
     
-    // Only highlight if there's more than 1 lap
     if (laps.length === 1) return { fastestId: null, slowestId: null, fastestTime: fast.lapTime, slowestTime: slow.lapTime };
 
     return { fastestId: fast.id, slowestId: slow.id, fastestTime: fast.lapTime, slowestTime: slow.lapTime };
@@ -97,43 +105,46 @@ export const Stopwatch = () => {
   const timeParts = formatTimeParts(elapsedTime);
 
   return (
-    <div className="min-h-screen bg-[#0A0E17] flex flex-col items-center py-10 px-4 font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0A0E17] flex flex-col items-center py-10 px-4 font-sans selection:bg-indigo-500/30 transition-colors duration-300">
       
       {/* Top Header Outside Card */}
       <div className="w-full max-w-[900px] flex justify-between items-center mb-6">
         <div className="flex items-center gap-4">
-          <div className="text-indigo-500 bg-indigo-500/10 p-2.5 rounded-2xl">
+          <div className="text-indigo-600 dark:text-indigo-500 bg-indigo-100 dark:bg-indigo-500/10 p-2.5 rounded-2xl">
             <Timer size={32} strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-wide">Stopwatch</h1>
-            <p className="text-slate-400 text-sm font-medium">Track your time precisely</p>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-wide">Stopwatch</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Track your time precisely</p>
           </div>
         </div>
         
-        {/* Theme Toggle Mock */}
-        <div className="flex items-center gap-3 bg-[#121826] border border-slate-800 rounded-full p-2 px-3 shadow-sm cursor-pointer hover:bg-slate-800/50 transition-colors">
-          <Sun size={16} className="text-slate-500" />
-          <div className="w-9 h-5 bg-indigo-500 rounded-full relative shadow-inner">
-            <div className="absolute right-1 top-0.5 w-4 h-4 bg-white rounded-full shadow-sm"></div>
+        {/* Theme Toggle */}
+        <div 
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          className="flex items-center gap-3 bg-white dark:bg-[#121826] border border-slate-200 dark:border-slate-800 rounded-full p-2 px-3 shadow-sm cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+        >
+          <Sun size={16} className={!isDarkMode ? "text-amber-500" : "text-slate-500"} />
+          <div className="w-9 h-5 bg-slate-300 dark:bg-indigo-500 rounded-full relative shadow-inner transition-colors">
+            <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-300 ${isDarkMode ? 'translate-x-4' : 'translate-x-1'}`}></div>
           </div>
-          <Moon size={16} className="text-slate-200" />
+          <Moon size={16} className={isDarkMode ? "text-indigo-400" : "text-slate-400"} />
         </div>
       </div>
 
       {/* Main Container Card */}
-      <div className="w-full max-w-[900px] bg-[#121826] border border-slate-800 rounded-[32px] p-6 sm:p-10 shadow-2xl flex flex-col">
+      <div className="w-full max-w-[900px] bg-white dark:bg-[#121826] border border-slate-200 dark:border-slate-800 rounded-[32px] p-6 sm:p-10 shadow-xl dark:shadow-2xl flex flex-col transition-colors duration-300">
         
         {/* Running Indicator */}
         <div className="flex justify-center mb-8 h-7">
           {isRunning && (
-            <div className="flex items-center gap-2 bg-emerald-950/40 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase border border-emerald-900/50 shadow-[0_0_10px_rgba(16,185,129,0.1)]">
-              <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.8)]"></span>
+            <div className="flex items-center gap-2 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase border border-emerald-200 dark:border-emerald-900/50 shadow-[0_0_10px_rgba(16,185,129,0.1)]">
+              <span className="h-1.5 w-1.5 bg-emerald-500 dark:bg-emerald-400 rounded-full animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.8)]"></span>
               Running
             </div>
           )}
           {!isRunning && elapsedTime > 0 && (
-            <div className="flex items-center gap-2 bg-amber-950/40 text-amber-500 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase border border-amber-900/50">
+            <div className="flex items-center gap-2 bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-500 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase border border-amber-200 dark:border-amber-900/50">
               <span className="h-1.5 w-1.5 bg-amber-500 rounded-full"></span>
               Paused
             </div>
@@ -141,24 +152,24 @@ export const Stopwatch = () => {
         </div>
         
         {/* Huge Timer Display */}
-        <div className="flex justify-center items-start text-white font-mono font-medium tracking-tight select-none w-full max-w-full">
+        <div className="flex justify-center items-start text-slate-800 dark:text-white font-mono font-medium tracking-tight select-none w-full max-w-full">
           <div className="flex flex-col items-center w-[18%] sm:w-24 md:w-28">
             <span className="text-4xl sm:text-6xl md:text-[84px] leading-none tracking-tighter">{timeParts.hours}</span>
-            <span className="text-slate-500 text-[9px] sm:text-[10px] md:text-xs mt-2 md:mt-3 font-sans font-semibold tracking-widest">HH</span>
+            <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] md:text-xs mt-2 md:mt-3 font-sans font-semibold tracking-widest">HH</span>
           </div>
-          <span className="text-3xl sm:text-5xl md:text-[72px] leading-none mx-0.5 sm:mx-1 md:mx-2 text-slate-500 pt-1 sm:pt-1 md:pt-2 font-light">:</span>
+          <span className="text-3xl sm:text-5xl md:text-[72px] leading-none mx-0.5 sm:mx-1 md:mx-2 text-slate-400 dark:text-slate-500 pt-1 sm:pt-1 md:pt-2 font-light">:</span>
           <div className="flex flex-col items-center w-[18%] sm:w-24 md:w-28">
             <span className="text-4xl sm:text-6xl md:text-[84px] leading-none tracking-tighter">{timeParts.minutes}</span>
-            <span className="text-slate-500 text-[9px] sm:text-[10px] md:text-xs mt-2 md:mt-3 font-sans font-semibold tracking-widest">MM</span>
+            <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] md:text-xs mt-2 md:mt-3 font-sans font-semibold tracking-widest">MM</span>
           </div>
-          <span className="text-3xl sm:text-5xl md:text-[72px] leading-none mx-0.5 sm:mx-1 md:mx-2 text-slate-500 pt-1 sm:pt-1 md:pt-2 font-light">:</span>
+          <span className="text-3xl sm:text-5xl md:text-[72px] leading-none mx-0.5 sm:mx-1 md:mx-2 text-slate-400 dark:text-slate-500 pt-1 sm:pt-1 md:pt-2 font-light">:</span>
           <div className="flex flex-col items-center w-[18%] sm:w-24 md:w-28">
             <span className="text-4xl sm:text-6xl md:text-[84px] leading-none tracking-tighter">{timeParts.seconds}</span>
-            <span className="text-slate-500 text-[9px] sm:text-[10px] md:text-xs mt-2 md:mt-3 font-sans font-semibold tracking-widest">SS</span>
+            <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] md:text-xs mt-2 md:mt-3 font-sans font-semibold tracking-widest">SS</span>
           </div>
           <div className="flex flex-col items-start w-[24%] sm:w-32 md:w-36 pl-0.5 sm:pl-1 md:pl-2">
-            <span className="text-4xl sm:text-6xl md:text-[84px] leading-none text-slate-500 tracking-tighter">.{timeParts.milliseconds}</span>
-            <span className="text-slate-500 text-[9px] sm:text-[10px] md:text-xs mt-2 md:mt-3 font-sans font-semibold tracking-widest w-full text-center">MMM</span>
+            <span className="text-4xl sm:text-6xl md:text-[84px] leading-none text-slate-400 dark:text-slate-500 tracking-tighter">.{timeParts.milliseconds}</span>
+            <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] md:text-xs mt-2 md:mt-3 font-sans font-semibold tracking-widest w-full text-center">MMM</span>
           </div>
         </div>
 
@@ -167,7 +178,7 @@ export const Stopwatch = () => {
           {!isRunning ? (
             <button
               onClick={handleStart}
-              className="flex items-center justify-center gap-2.5 bg-indigo-500 hover:bg-indigo-400 text-white py-3.5 sm:py-4 rounded-2xl font-semibold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-lg shadow-indigo-900/20 w-full sm:min-w-[140px]"
+              className="flex items-center justify-center gap-2.5 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-500 dark:hover:bg-indigo-400 text-white py-3.5 sm:py-4 rounded-2xl font-semibold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-lg shadow-indigo-900/20 w-full sm:min-w-[140px]"
             >
               <Play size={18} fill="currentColor" />
               {hasStarted ? "Resume" : "Start"}
@@ -175,7 +186,7 @@ export const Stopwatch = () => {
           ) : (
             <button
               onClick={handlePause}
-              className="flex items-center justify-center gap-2.5 bg-indigo-500 hover:bg-indigo-400 text-white py-3.5 sm:py-4 rounded-2xl font-semibold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-lg shadow-indigo-900/20 w-full sm:min-w-[140px]"
+              className="flex items-center justify-center gap-2.5 bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-500 dark:hover:bg-indigo-400 text-white py-3.5 sm:py-4 rounded-2xl font-semibold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-lg shadow-indigo-900/20 w-full sm:min-w-[140px]"
             >
               <Pause size={18} fill="currentColor" />
               Pause
@@ -185,16 +196,16 @@ export const Stopwatch = () => {
           <button
             onClick={handleLap}
             disabled={!isRunning}
-            className="flex items-center justify-center gap-2.5 bg-transparent border border-slate-700 hover:bg-slate-800 disabled:opacity-50 disabled:hover:bg-transparent text-slate-200 py-3.5 sm:py-4 rounded-2xl font-semibold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-500/50 w-full sm:min-w-[140px]"
+            className="flex items-center justify-center gap-2.5 bg-white dark:bg-transparent border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 disabled:hover:bg-transparent text-slate-700 dark:text-slate-200 py-3.5 sm:py-4 rounded-2xl font-semibold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-500/50 w-full sm:min-w-[140px]"
           >
-            <Flag size={18} className="text-slate-400" />
+            <Flag size={18} className="text-slate-500 dark:text-slate-400" />
             Lap
           </button>
           
           <button
             onClick={handleReset}
             disabled={!hasStarted}
-            className="col-span-2 sm:col-span-1 flex items-center justify-center gap-2.5 bg-transparent border border-rose-900/50 hover:bg-rose-950/30 disabled:opacity-50 disabled:hover:bg-transparent text-rose-500 py-3.5 sm:py-4 rounded-2xl font-semibold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-500/50 w-full sm:min-w-[140px]"
+            className="col-span-2 sm:col-span-1 flex items-center justify-center gap-2.5 bg-white dark:bg-transparent border border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-950/30 disabled:opacity-50 disabled:hover:bg-transparent text-rose-600 dark:text-rose-500 py-3.5 sm:py-4 rounded-2xl font-semibold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-500/50 w-full sm:min-w-[140px]"
           >
             <RotateCcw size={18} className="text-rose-500" />
             Reset
@@ -202,36 +213,36 @@ export const Stopwatch = () => {
         </div>
 
         {/* Statistics Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 bg-[#0A0E17]/40 border border-slate-800/80 rounded-2xl p-4 mb-8">
-          <div className="flex items-center gap-4 px-6 py-2 md:py-0 md:border-r border-slate-800/80">
-            <div className="bg-indigo-500/10 text-indigo-400 p-3 rounded-xl">
+        <div className="grid grid-cols-1 md:grid-cols-3 bg-slate-50 dark:bg-[#0A0E17]/40 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-4 mb-8 transition-colors">
+          <div className="flex items-center gap-4 px-6 py-2 md:py-0 md:border-r border-slate-200 dark:border-slate-800/80">
+            <div className="bg-indigo-100 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 p-3 rounded-xl">
               <List size={22} />
             </div>
             <div>
-              <div className="text-slate-400 text-xs font-medium mb-0.5">Total Laps</div>
-              <div className="text-white text-xl font-semibold">{laps.length}</div>
+              <div className="text-slate-500 dark:text-slate-400 text-xs font-medium mb-0.5">Total Laps</div>
+              <div className="text-slate-900 dark:text-white text-xl font-semibold">{laps.length}</div>
             </div>
           </div>
           
-          <div className="flex items-center gap-4 px-6 py-2 md:py-0 md:border-r border-slate-800/80">
-            <div className="bg-emerald-500/10 text-emerald-400 p-3 rounded-xl">
+          <div className="flex items-center gap-4 px-6 py-2 md:py-0 md:border-r border-slate-200 dark:border-slate-800/80">
+            <div className="bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 p-3 rounded-xl">
               <Zap size={22} fill="currentColor" />
             </div>
             <div>
-              <div className="text-slate-400 text-xs font-medium mb-0.5">Fastest Lap</div>
-              <div className="text-emerald-400 text-xl font-semibold font-mono">
+              <div className="text-slate-500 dark:text-slate-400 text-xs font-medium mb-0.5">Fastest Lap</div>
+              <div className="text-emerald-600 dark:text-emerald-400 text-xl font-semibold font-mono">
                 {fastestTime !== null ? formatTime(fastestTime, false) : '--:--.---'}
               </div>
             </div>
           </div>
           
           <div className="flex items-center gap-4 px-6 py-2 md:py-0">
-            <div className="bg-rose-500/10 text-rose-400 p-3 rounded-xl">
+            <div className="bg-rose-100 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 p-3 rounded-xl">
               <Clock size={22} />
             </div>
             <div>
-              <div className="text-slate-400 text-xs font-medium mb-0.5">Slowest Lap</div>
-              <div className="text-rose-400 text-xl font-semibold font-mono">
+              <div className="text-slate-500 dark:text-slate-400 text-xs font-medium mb-0.5">Slowest Lap</div>
+              <div className="text-rose-600 dark:text-rose-400 text-xl font-semibold font-mono">
                 {slowestTime !== null ? formatTime(slowestTime, false) : '--:--.---'}
               </div>
             </div>
@@ -239,30 +250,30 @@ export const Stopwatch = () => {
         </div>
 
         {/* Lap Times Table */}
-        <div className="border border-slate-800/80 bg-[#0A0E17]/60 rounded-2xl overflow-hidden flex flex-col flex-1 min-h-[250px]">
+        <div className="border border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-[#0A0E17]/60 rounded-2xl overflow-hidden flex flex-col flex-1 min-h-[250px] transition-colors">
           {/* Table Header */}
-          <div className="flex justify-between items-center p-5 border-b border-slate-800/80 bg-[#121826]/30">
-            <div className="flex items-center gap-3 text-white font-semibold">
-              <List size={18} className="text-slate-400" />
+          <div className="flex justify-between items-center p-5 border-b border-slate-200 dark:border-slate-800/80 bg-slate-100/50 dark:bg-[#121826]/30">
+            <div className="flex items-center gap-3 text-slate-800 dark:text-white font-semibold">
+              <List size={18} className="text-slate-500 dark:text-slate-400" />
               Lap Times
             </div>
-            <div className="text-slate-400 text-sm font-medium">
+            <div className="text-slate-500 dark:text-slate-400 text-sm font-medium">
               {laps.length} laps
             </div>
           </div>
           
           {/* Column Headers */}
-          <div className="grid grid-cols-[1fr_2fr_2fr_2fr_auto] sm:grid-cols-[1fr_2fr_2fr_1.5fr_auto] gap-4 px-6 py-3.5 text-[11px] font-bold text-slate-500 tracking-widest uppercase border-b border-slate-800/80">
+          <div className="grid grid-cols-[1fr_2fr_2fr_2fr_auto] sm:grid-cols-[1fr_2fr_2fr_1.5fr_auto] gap-4 px-6 py-3.5 text-[11px] font-bold text-slate-500 tracking-widest uppercase border-b border-slate-200 dark:border-slate-800/80">
             <div>#</div>
             <div>Lap Time</div>
             <div>Total Time</div>
             <div>Status</div>
-            <div className="w-6 flex justify-end"><ChevronUp size={14} className="text-slate-600" /></div>
+            <div className="w-6 flex justify-end"><ChevronUp size={14} className="text-slate-400 dark:text-slate-600" /></div>
           </div>
           
           {/* Table Rows */}
           {laps.length === 0 ? (
-            <div className="flex-1 flex items-center justify-center text-slate-500 text-sm py-12">
+            <div className="flex-1 flex items-center justify-center text-slate-400 dark:text-slate-500 text-sm py-12">
               No laps recorded yet.
             </div>
           ) : (
@@ -273,32 +284,32 @@ export const Stopwatch = () => {
                 const isNewest = index === 0;
                 
                 let statusText = "Normal";
-                let statusClasses = "bg-slate-800/80 text-slate-300";
+                let statusClasses = "bg-slate-200 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300";
                 
                 if (isFastest) {
                   statusText = "Fastest";
-                  statusClasses = "bg-emerald-500/10 text-emerald-400";
+                  statusClasses = "bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400";
                 } else if (isSlowest) {
                   statusText = "Slowest";
-                  statusClasses = "bg-rose-500/10 text-rose-400";
+                  statusClasses = "bg-rose-100 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400";
                 }
 
                 return (
                   <div 
                     key={lap.id}
-                    className={`grid grid-cols-[1fr_2fr_2fr_2fr_auto] sm:grid-cols-[1fr_2fr_2fr_1.5fr_auto] gap-4 px-6 py-4 items-center text-sm font-mono border-b border-slate-800/40 last:border-0 transition-colors animate-slide-in ${
-                      isNewest ? 'bg-indigo-500/5' : 'hover:bg-slate-800/20'
+                    className={`grid grid-cols-[1fr_2fr_2fr_2fr_auto] sm:grid-cols-[1fr_2fr_2fr_1.5fr_auto] gap-4 px-6 py-4 items-center text-sm font-mono border-b border-slate-200 dark:border-slate-800/40 last:border-0 transition-colors animate-slide-in ${
+                      isNewest ? 'bg-indigo-50 dark:bg-indigo-500/5' : 'hover:bg-slate-100 dark:hover:bg-slate-800/20'
                     }`}
                   >
-                    <div className="text-white font-medium">#{lap.id}</div>
-                    <div className="text-slate-300">+{formatTime(lap.lapTime, false)}</div>
-                    <div className="text-slate-300">{formatTime(lap.overallTime, false)}</div>
+                    <div className="text-slate-800 dark:text-white font-medium">#{lap.id}</div>
+                    <div className="text-slate-600 dark:text-slate-300">+{formatTime(lap.lapTime, false)}</div>
+                    <div className="text-slate-600 dark:text-slate-300">{formatTime(lap.overallTime, false)}</div>
                     <div>
                       <span className={`px-3 py-1.5 rounded-full text-xs font-sans font-semibold tracking-wide ${statusClasses}`}>
                         {statusText}
                       </span>
                     </div>
-                    <div className="text-slate-500 w-6 flex justify-end hover:text-slate-300 cursor-pointer transition-colors">
+                    <div className="text-slate-400 dark:text-slate-500 w-6 flex justify-end hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer transition-colors">
                       <MoreHorizontal size={16} />
                     </div>
                   </div>
@@ -310,12 +321,12 @@ export const Stopwatch = () => {
 
         {/* Footer */}
         <div className="flex items-center justify-center gap-4 mt-8 opacity-40">
-          <div className="h-[1px] w-12 sm:w-24 bg-slate-600"></div>
-          <div className="flex items-center gap-2 text-slate-300 text-[11px] sm:text-xs font-medium tracking-wide">
+          <div className="h-[1px] w-12 sm:w-24 bg-slate-400 dark:bg-slate-600"></div>
+          <div className="flex items-center gap-2 text-slate-500 dark:text-slate-300 text-[11px] sm:text-xs font-medium tracking-wide">
             <Timer size={14} />
             Small steps. Big goals.
           </div>
-          <div className="h-[1px] w-12 sm:w-24 bg-slate-600"></div>
+          <div className="h-[1px] w-12 sm:w-24 bg-slate-400 dark:bg-slate-600"></div>
         </div>
 
       </div>

@@ -1,9 +1,9 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   body {
-    background-color: var(--color-zinc-950);
-    color: var(--color-zinc-50);
+    @apply bg-slate-50 text-slate-900 dark:bg-[#0A0E17] dark:text-slate-200;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     margin: 0;
