@@ -46,7 +46,7 @@ function updateDisplay(time) {
     hoursEl.textContent = h;
     minutesEl.textContent = m;
     secondsEl.textContent = s;
-    millisecondsEl.textContent = `.${ms}`;
+    millisecondsEl.textContent = ms;
 }
 
 function startTimer() {
