@@ -16,7 +16,6 @@ body.dark-mode {
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --border-color: #334155;
-    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
 }
 
 * {
@@ -27,9 +26,9 @@ body.dark-mode {
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+    background-color: var(--bg-color);
     color: var(--text-primary);
-    transition: background 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
     display: flex;
     justify-content: center;
     padding: 2rem 1rem;
@@ -131,11 +130,6 @@ header p {
     line-height: 1;
 }
 
-#hours { color: #8b5cf6; }
-#minutes { color: #ec4899; }
-#seconds { color: #3b82f6; }
-#milliseconds { color: #10b981; }
-
 .time-part label {
     font-size: 0.75rem;
     color: var(--text-secondary);
@@ -152,7 +146,7 @@ header p {
 }
 
 .milliseconds-part span {
-    /* Color handled by #milliseconds ID */
+    color: var(--text-secondary);
 }
 
 .controls {
