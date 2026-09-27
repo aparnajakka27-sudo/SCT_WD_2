@@ -1,0 +1,5 @@
+{
+  "buildCommand": "echo 'Static HTML Project'",
+  "installCommand": "echo 'No install needed'",
+  "outputDirectory": "."
+}
